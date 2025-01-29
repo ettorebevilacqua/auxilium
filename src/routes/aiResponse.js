@@ -14,7 +14,7 @@ router.post('/generate-response', async (req, res) => {
         }
 
         const response = await axios.post("https://api.openai.com/v1/chat/completions", {
-            model: "gpt-4",
+            model: "gpt-4o-mini",
             messages: [{ role: "system", content: "Rispondi in modo professionale." }, { role: "user", content: userMessage }],
             temperature: settings.ai.temperature || 0.7,
             max_tokens: settings.ai.maxTokens || 200
