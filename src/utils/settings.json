@@ -1,2 +1,7 @@
-
-{}
+{
+  "ai": {
+    "openAiKey": "test etto xx",
+    "temperature": "0.7",
+    "maxTokens": "200"
+  }
+}
