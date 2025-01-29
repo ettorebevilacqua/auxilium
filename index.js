@@ -6,7 +6,7 @@ const shopRoutes = require('./src/routes/shop');
 const dashboardRoutes = require('./src/routes/dashboard');
 const path = require('path');
 const settingsRoutes = require('./src/routes/settings');
-
+const aiConfigRoutes = require('./src/routes/aiConfig');
 
 const app = express();
 const PORT = 3000;
