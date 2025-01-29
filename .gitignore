@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+.env
+>>>>>>> aa3210a (first)
 # Logs
 logs
 *.log
@@ -104,6 +108,15 @@ dist
 .temp
 .cache
 
+<<<<<<< HEAD
+=======
+# vitepress build output
+**/.vitepress/dist
+
+# vitepress cache directory
+**/.vitepress/cache
+
+>>>>>>> aa3210a (first)
 # Docusaurus cache and generated files
 .docusaurus
 

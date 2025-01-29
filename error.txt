@@ -1,0 +1,4 @@
+shopSessions start   {}
+Shopify app listening on port 3000
+🌍 Redirecting to /auth: quickstart-58e08680.myshopify.com
+🔄 Reindirizzamento a Shopify OAuth: https://quickstart-58e08680.myshopify.com/admin/oauth/authorize?client_id=e9fdc5c5b42c7da81ff7b5e4a1b59b03&scope=read_products,write_products&redirect_uri=https://www.ablaeat.com/auth/callback

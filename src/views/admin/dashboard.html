@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auxilium Dashboard</title>
+    <link rel="stylesheet" href="/public/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>⚙️ Auxilium - Impostazioni</h1>
+        
+        <label for="welcomeMessage">Messaggio di Benvenuto:</label>
+        <input type="text" id="welcomeMessage" placeholder="Inserisci un messaggio">
+
+        <label for="aiLogo">URL Logo AI (GIF/JPG/PNG):</label>
+        <input type="text" id="aiLogo" placeholder="Inserisci URL immagine">
+
+        <label for="category">Categoria:</label>
+        <select id="category">
+            <option value="moda">Moda</option>
+            <option value="elettronica">Elettronica</option>
+            <option value="giardinaggio">Giardinaggio</option>
+ 						<option value="petfood">Pet Food</option>
+        </select>
+
+        <button onclick="saveSettings()">💾 Salva Impostazioni</button>
+    </div>
+
+    <script>
+        async function loadSettings() {
+            const response = await fetch('/settings');
+            const settings = await response.json();
+            document.getElementById('welcomeMessage').value = settings.welcomeMessage || '';
+            document.getElementById('aiLogo').value = settings.aiLogo || '';
+            document.getElementById('category').value = settings.category || 'moda';
+        }
+
+        async function saveSettings() {
+            const settings = {
+                welcomeMessage: document.getElementById('welcomeMessage').value,
+                aiLogo: document.getElementById('aiLogo').value,
+                category: document.getElementById('category').value
+            };
+
+            await fetch('/settings', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(settings)
+            });
+
+            alert("✅ Impostazioni salvate con successo!");
+        }
+
+        loadSettings();
+    </script>
+</body>
+</html>

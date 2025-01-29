@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auxilium App - Dashboard</title>
+
+    <!-- Shopify App Bridge -->
+    <script src="https://unpkg.com/@shopify/app-bridge@2"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const queryString = new URLSearchParams(window.location.search);
+            const shop = queryString.get("shop");
+
+            if (!shop) {
+                alert("Errore: Shop non trovato.");
+                return;
+            }
+
+            const AppBridge = window["app-bridge"];
+            const createApp = AppBridge.default;
+            const actions = AppBridge.actions;
+            const Redirect = actions.Redirect;
+
+            const app = createApp({
+                apiKey: "e9fdc5c5b42c7da81ff7b5e4a1b59b03",
+                shopOrigin: shop,
+                forceRedirect: true
+            });
+
+            const redirect = Redirect.create(app);
+        });
+    </script>
+
+    <link rel="stylesheet" href="/public/styles.css">
+</head>
+<body>
+    <header>
+        <h1>🎛️ Auxilium Dashboard</h1>
+    </header>
+
+    <section>
+        <h2>Benvenuto nella tua app Shopify!</h2>
+        <p>Configura Auxilium AI e inizia ad ottimizzare il tuo negozio.</p>
+    </section>
+</body>
+</html>
