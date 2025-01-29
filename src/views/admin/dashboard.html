@@ -37,11 +37,31 @@
 
         <label for="maxTokens">Numero massimo di token:</label>
         <input type="number" id="maxTokens" min="50" max="1000" step="50" value="200">
+<h2>🧠 Test AI Response</h2>
+<label for="userMessage">Inserisci una domanda:</label>
+<input type="text" id="userMessage" placeholder="Scrivi una richiesta per l'AI...">
+<button onclick="generateResponse()">📝 Genera Risposta AI</button>
+
+<h3>Risposta AI:</h3>
+<div id="aiResponseBox" style="border: 1px solid #ccc; padding: 10px; min-height: 50px;">Aspetta...</div>
 
         <button onclick="saveSettings()">💾 Salva Impostazioni</button>
     </div>
 
     <script>
+    async function generateResponse() {
+        const userMessage = document.getElementById('userMessage').value;
+        document.getElementById('aiResponseBox').innerHTML = "⏳ Sto elaborando...";
+
+        const response = await fetch('/generate-response', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userMessage })
+        });
+
+        const data = await response.json();
+        document.getElementById('aiResponseBox').innerHTML = data.aiResponse || "Errore nella risposta AI";
+    }
         async function loadSettings() {
             const response = await fetch('/settings');
             const settings = await response.json();
