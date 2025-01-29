@@ -39,7 +39,7 @@ app.use('/public', express.static(path.join(__dirname, 'public'), {
 }));
 app.use(settingsRoutes);
 app.use(aiConfigRoutes);
-app.use(aiResponseRoutes);
+app.use('/', aiResponseRoutes);
 app.use('/', indexRoutes);
 app.use('/', authRoutes);
 app.use('/', shopRoutes);
