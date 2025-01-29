@@ -5,6 +5,7 @@ const indexRoutes = require('./src/routes/index');
 const shopRoutes = require('./src/routes/shop');
 const dashboardRoutes = require('./src/routes/dashboard');
 const path = require('path');
+const express = require('express');
 
 
 const app = express();
@@ -35,7 +36,7 @@ app.use('/public', express.static(path.join(__dirname, 'public'), {
         }
     }
 }));
-
+app.use(settingsRoutes);
 app.use('/', indexRoutes);
 app.use('/', authRoutes);
 app.use('/', shopRoutes);
