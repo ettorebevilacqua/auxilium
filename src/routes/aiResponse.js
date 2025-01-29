@@ -14,7 +14,7 @@ router.post('/generate-response', async (req, res) => {
         }
 
       const dataOpenAi = {
-            model: "gpt-4o-mini",
+            model: "gpt-4o",
             messages: [{ role: "system", content: "Rispondi in modo professionale." }, { role: "user", content: userMessage }],
             temperature: settings.ai.temperature || 0.7,
             max_tokens: settings.ai.maxTokens || 200
