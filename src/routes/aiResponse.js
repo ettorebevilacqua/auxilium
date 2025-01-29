@@ -20,7 +20,7 @@ router.post('/generate-response', async (req, res) => {
             max_tokens: settings.ai.maxTokens || 200
         }
 
-       console.log('test invio a https://api.openai.com/v1/chat/completions');
+       console.log('test invio a https://api.openai.com/v1/chat/completions', dataOpenAi);
        console.log('openai settings.ai.openAiKey', settings.ai.openAiKey);
 
         const response = await axios.post("https://api.openai.com/v1/chat/completions", dataOpenAi, {
