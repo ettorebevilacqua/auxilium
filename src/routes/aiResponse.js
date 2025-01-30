@@ -24,7 +24,7 @@ router.post('/generate-response', async (req, res) => {
        console.log('openai settings.ai.openAiKey', settings.ai.openAiKey);
         try {
                 const response = await axios.post("https://api.openai.com/v1/chat/completions", dataOpenAi, {
-                    header    console.log ('Risposta AI' , response.data)s: { Authorization: `Bearer ${settings.ai.openAiKey}`, "Content-Type": "application/json" }
+                    headers: { Authorization: `Bearer ${settings.ai.openAiKey}`, "Content-Type": "application/json" }
                 });
         } catch (error) {
                 console.error("❌ Errore nella generazione della risposta AI:", error);
