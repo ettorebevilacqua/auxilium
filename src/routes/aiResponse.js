@@ -13,15 +13,18 @@ router.post('/generate-response', async (req, res) => {
             return res.status(400).json({ error: "API Key OpenAI mancante!" });
         }
 
+        if (!userMessage || typeof userMessage !== "string") {
+            return res.status(400).json({ error: "Messaggio utente non valido!" });
+        }
+
         const dataOpenAi = {
-            model: "gpt-4o-mini",
+            model: "gpt-4o", // Usa un modello sicuro
             messages: [{ role: "system", content: "Rispondi in modo professionale." }, { role: "user", content: userMessage }],
             temperature: settings.ai.temperature || 0.7,
             max_tokens: settings.ai.maxTokens || 200
         };
 
-        console.log('🔄 Invio a OpenAI:', dataOpenAi);
-        console.log('🔑 API Key:', settings.ai.openAiKey);
+        console.log("📡 Payload inviato a OpenAI:", JSON.stringify(dataOpenAi, null, 2));
 
         const response = await axios.post("https://api.openai.com/v1/chat/completions", dataOpenAi, {
             headers: { Authorization: `Bearer ${settings.ai.openAiKey}`, "Content-Type": "application/json" }
@@ -43,8 +46,8 @@ router.post('/generate-response', async (req, res) => {
         return res.json({ aiResponse });
 
     } catch (error) {
-        console.error("❌ Errore nella generazione della risposta AI:", error.message || error);
-        return res.status(500).json({ error: error.message || "Errore nella generazione della risposta AI" });
+        console.error("❌ Errore nella generazione della risposta AI:", error.response ? error.response.data : error.message);
+        return res.status(500).json({ error: error.response ? error.response.data : "Errore nella generazione della risposta AI" });
     }
 });
 
