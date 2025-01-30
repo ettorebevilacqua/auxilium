@@ -5,7 +5,7 @@ const db = require('../utils/db');
 
 // Endpoint per generare la risposta AI
 router.post('/generate-response', async (req, res) => {
-    try {
+
         const { userMessage } = req.body;
         const settings = await db.getSettings();
 
@@ -14,7 +14,7 @@ router.post('/generate-response', async (req, res) => {
         }
 
       const dataOpenAi = {
-            model: "gpt-4o",
+            model: "gpt-4o-mini",
             messages: [{ role: "system", content: "Rispondi in modo professionale." }, { role: "user", content: userMessage }],
             temperature: settings.ai.temperature || 0.7,
             max_tokens: settings.ai.maxTokens || 200
@@ -22,11 +22,16 @@ router.post('/generate-response', async (req, res) => {
 
        console.log('test invio a https://api.openai.com/v1/chat/completions', dataOpenAi);
        console.log('openai settings.ai.openAiKey', settings.ai.openAiKey);
-
+try {
         const response = await axios.post("https://api.openai.com/v1/chat/completions", dataOpenAi, {
             headers: { Authorization: `Bearer ${settings.ai.openAiKey}`, "Content-Type": "application/json" }
         });
-
+    } catch (error) {
+        console.error("❌ Errore nella generazione della risposta AI:", error);
+        res.status(500).json({ error: "Errore nella generazione della risposta AI" });
+    }
+    console.log ('Risposta AI' , response.data)
+        return
         const aiResponse = response.data.choices[0].message.content;
         console.log("✅ Risposta AI:", aiResponse);
 
@@ -36,11 +41,7 @@ router.post('/generate-response', async (req, res) => {
         settings.ai.history = history;
         await db.saveSettings(settings);
 
-        res.json({ aiResponse });
-    } catch (error) {
-        console.error("❌ Errore nella generazione della risposta AI:", error);
-        res.status(500).json({ error: "Errore nella generazione della risposta AI" });
-    }
+        res.json({ aiResponse });ì
 });
 
 module.exports = router;
