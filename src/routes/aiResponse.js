@@ -30,8 +30,12 @@ router.post('/generate-response', async (req, res) => {
                 console.error("❌ Errore nella generazione della risposta AI:", error);
                 res.status(500).json({ error: "Errore nella generazione della risposta AI" });
         }
-     
-        const aiResponse = response.data; // .choices[0].message.content;
+        const aiData = response.data; // .choices[0].message.content;
+        if (!aiData || !aiData.choices[0] || !aiData.choices[0].message){
+                return  res.status(500).json({ error: "Errore nei dati della risposta AI" });
+        }
+        
+        const aiResponse = response.data.choices[0].message.content || '';
         console.log("✅ Risposta AI:", aiResponse);
 
         // Salva la risposta nel database
