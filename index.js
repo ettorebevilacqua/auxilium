@@ -8,6 +8,7 @@ const path = require('path');
 const settingsRoutes = require('./src/routes/settings');
 const aiConfigRoutes = require('./src/routes/aiConfig');
 const aiResponseRoutes = require('./src/routes/aiResponse');
+const shopifyIntegrationRoutes = require('./src/routes/shopifyIntegration');
 
 const app = express();
 const PORT = 3000;
@@ -39,6 +40,7 @@ app.use('/public', express.static(path.join(__dirname, 'public'), {
 }));
 app.use(settingsRoutes);
 app.use(aiConfigRoutes);
+app.use(shopifyIntegrationRoutes);
 app.use('/', aiResponseRoutes);
 app.use('/', indexRoutes);
 app.use('/', authRoutes);
