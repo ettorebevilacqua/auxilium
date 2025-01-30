@@ -17,11 +17,12 @@ router.post('/generate-response', async (req, res) => {
             return res.status(400).json({ error: "Messaggio utente non valido!" });
         }
 
+        const maxTokens = parseInt(settings.ai.maxTokens, 10);
         const dataOpenAi = {
-            model: "gpt-4o", // Usa un modello sicuro
+            model: "gpt-4o-mini", // Assicurati che il modello sia valido
             messages: [{ role: "system", content: "Rispondi in modo professionale." }, { role: "user", content: userMessage }],
             temperature: settings.ai.temperature || 0.7,
-            max_tokens: settings.ai.maxTokens || 200
+            max_tokens: Number.isInteger(maxTokens) ? maxTokens : 200  // Se non è un numero valido, usa 200
         };
 
         console.log("📡 Payload inviato a OpenAI:", JSON.stringify(dataOpenAi, null, 2));
