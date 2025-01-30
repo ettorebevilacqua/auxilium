@@ -26,25 +26,26 @@ router.post('/generate-response', async (req, res) => {
                 const response = await axios.post("https://api.openai.com/v1/chat/completions", dataOpenAi, {
                     headers: { Authorization: `Bearer ${settings.ai.openAiKey}`, "Content-Type": "application/json" }
                 });
+                
+                const aiData = response.data; // .choices[0].message.content;
+                if (!aiData || !aiData.choices[0] || !aiData.choices[0].message){
+                        return  res.status(500).json({ error: "Errore nei dati della risposta AI" });
+                }
+         
+                const aiResponse = response.data.choices[0].message.content || '';
+                console.log("✅ Risposta AI:", aiResponse);
+        
+                // Salva la risposta nel database
+                const history = settings.ai.history || [];
+                history.push({ userMessage, aiResponse, timestamp: new Date().toISOString() });
+                settings.ai.history = history;
+                await db.saveSettings(settings);
+        
+                res.json({ aiResponse });
         } catch (error) {
                 console.error("❌ Errore nella generazione della risposta AI:", error);
                 res.status(500).json({ error: "Errore nella generazione della risposta AI" });
         }
-        const aiData = response.data; // .choices[0].message.content;
-        if (!aiData || !aiData.choices[0] || !aiData.choices[0].message){
-                return  res.status(500).json({ error: "Errore nei dati della risposta AI" });
-        }
-        
-        const aiResponse = response.data.choices[0].message.content || '';
-        console.log("✅ Risposta AI:", aiResponse);
-
-        // Salva la risposta nel database
-        const history = settings.ai.history || [];
-        history.push({ userMessage, aiResponse, timestamp: new Date().toISOString() });
-        settings.ai.history = history;
-        await db.saveSettings(settings);
-
-        res.json({ aiResponse });ì
 });
 
 module.exports = router;
