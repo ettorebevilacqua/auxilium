@@ -6,3 +6,4 @@ router.post('/shopify/webhooks/order-created', async (req, res) => {
     // Possibile utilizzo: attivare un suggerimento AI post-vendita
     res.status(200).send("Webhook ricevuto!");
 });
+module.exports = router;
