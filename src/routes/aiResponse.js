@@ -26,7 +26,7 @@ router.post('/generate-response', async (req, res) => {
                 const response = await axios.post("https://api.openai.com/v1/chat/completions", dataOpenAi, {
                     headers: { Authorization: `Bearer ${settings.ai.openAiKey}`, "Content-Type": "application/json" }
                 });
-                  console.log('xxxxxxxxxxxxxx, response.data);
+                  console.log('xxxxxxxxxxxxxx', response.data);
 
                 const aiData = response.data; // .choices[0].message.content;
                 if (!aiData || !aiData.choices[0] || !aiData.choices[0].message){
