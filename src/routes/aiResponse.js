@@ -22,17 +22,16 @@ router.post('/generate-response', async (req, res) => {
 
        console.log('test invio a https://api.openai.com/v1/chat/completions', dataOpenAi);
        console.log('openai settings.ai.openAiKey', settings.ai.openAiKey);
-try {
-        const response = await axios.post("https://api.openai.com/v1/chat/completions", dataOpenAi, {
-            headers: { Authorization: `Bearer ${settings.ai.openAiKey}`, "Content-Type": "application/json" }
-        });
-    } catch (error) {
-        console.error("❌ Errore nella generazione della risposta AI:", error);
-        res.status(500).json({ error: "Errore nella generazione della risposta AI" });
-    }
-    console.log ('Risposta AI' , response.data)
-        return
-        const aiResponse = response.data.choices[0].message.content;
+        try {
+                const response = await axios.post("https://api.openai.com/v1/chat/completions", dataOpenAi, {
+                    header    console.log ('Risposta AI' , response.data)s: { Authorization: `Bearer ${settings.ai.openAiKey}`, "Content-Type": "application/json" }
+                });
+        } catch (error) {
+                console.error("❌ Errore nella generazione della risposta AI:", error);
+                res.status(500).json({ error: "Errore nella generazione della risposta AI" });
+        }
+     
+        const aiResponse = response.data; // .choices[0].message.content;
         console.log("✅ Risposta AI:", aiResponse);
 
         // Salva la risposta nel database
