@@ -32,5 +32,3 @@ router.get('/shop-info', async (req, res) => {
 });
 
 module.exports = router;
-
-//TEST
