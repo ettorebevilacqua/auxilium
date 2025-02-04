@@ -31,7 +31,7 @@ router.get('/shop-info', async (req, res) => {
     }
 });
 // Endpoint per recuperare le collezioni (custom e smart) da Shopify
-router.get('/shop-collections', async (req, res) => {
+router.get('/collections', async (req, res) => {
     const { shop } = req.query;
   
     // Verifica che il parametro shop e il token di sessione siano presenti
