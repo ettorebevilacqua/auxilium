@@ -11,7 +11,7 @@ const aiResponseRoutes = require('./src/routes/aiResponse');
 const shopifyIntegrationRoutes = require('./src/routes/shopifyIntegration');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 i18n.configure({
   locales: ['en', 'it'],
