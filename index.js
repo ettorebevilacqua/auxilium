@@ -41,13 +41,14 @@ app.use('/public', express.static(path.join(__dirname, 'public'), {
 app.use(settingsRoutes);
 app.use(aiConfigRoutes);
 app.use(shopifyIntegrationRoutes);
+
 app.use('/', aiResponseRoutes);
 app.use('/', indexRoutes);
 app.use('/', authRoutes);
 app.use('/', shopRoutes);
 app.use('/', dashboardRoutes);
 
-console.log('Starting server...');
+console.log('Starting server... xx');
 
 app.listen(PORT, () => {
   console.log(`Shopify app listening on port ${PORT}`);
