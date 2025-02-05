@@ -47,6 +47,8 @@ app.use('/', authRoutes);
 app.use('/', shopRoutes);
 app.use('/', dashboardRoutes);
 
+console.log('Starting server...');
+
 app.listen(PORT, () => {
   console.log(`Shopify app listening on port ${PORT}`);
 });
