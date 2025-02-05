@@ -153,3 +153,4 @@ dist
 .pnp.*
 
 settings.json
+.vercel
