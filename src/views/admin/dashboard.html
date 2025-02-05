@@ -10,6 +10,7 @@
     <div class="container">
         <h1>⚙️ Auxilium - Impostazioni</h1>
         
+        <!-- Impostazioni Generali -->
         <label for="welcomeMessage">Messaggio di Benvenuto:</label>
         <input type="text" id="welcomeMessage" placeholder="Inserisci un messaggio">
 
@@ -21,19 +22,58 @@
             <option value="moda">Moda</option>
             <option value="elettronica">Elettronica</option>
             <option value="giardinaggio">Giardinaggio</option>
- 						<option value="petfood">Pet Food</option>
+            <option value="petfood">Pet Food</option>
         </select>
+
+        <hr>
+
+        <!-- Configurazione AI -->
+        <h2>🤖 Configurazione AI</h2>
+        <label for="openAiKey">OpenAI API Key:</label>
+        <input type="password" id="openAiKey" placeholder="Inserisci la chiave API di OpenAI">
+
+        <label for="temperature">Creatività AI (0.1 - 1.0):</label>
+        <input type="number" id="temperature" min="0.1" max="1.0" step="0.1" value="0.7">
+
+        <label for="maxTokens">Numero massimo di token:</label>
+        <input type="number" id="maxTokens" min="50" max="1000" step="50" value="200">
+<h2>🧠 Test AI Response</h2>
+<label for="userMessage">Inserisci una domanda:</label>
+<input type="text" id="userMessage" placeholder="Scrivi una richiesta per l'AI...">
+<button onclick="generateResponse()">📝 Genera Risposta AI</button>
+
+<h3>Risposta AI:</h3>
+<div id="aiResponseBox" style="border: 1px solid #ccc; padding: 10px; min-height: 50px;">Aspetta...</div>
 
         <button onclick="saveSettings()">💾 Salva Impostazioni</button>
     </div>
 
     <script>
+    async function generateResponse() {
+        const userMessage = document.getElementById('userMessage').value;
+        document.getElementById('aiResponseBox').innerHTML = "⏳ Sto elaborando...";
+
+        const response = await fetch('/generate-response', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userMessage })
+        });
+
+        const data = await response.json();
+        document.getElementById('aiResponseBox').innerHTML = data.aiResponse || "Errore nella risposta AI";
+    }
         async function loadSettings() {
             const response = await fetch('/settings');
             const settings = await response.json();
             document.getElementById('welcomeMessage').value = settings.welcomeMessage || '';
             document.getElementById('aiLogo').value = settings.aiLogo || '';
             document.getElementById('category').value = settings.category || 'moda';
+
+            const aiResponse = await fetch('/ai-settings');
+            const aiSettings = await aiResponse.json();
+            document.getElementById('openAiKey').value = aiSettings.openAiKey || '';
+            document.getElementById('temperature').value = aiSettings.temperature || 0.7;
+            document.getElementById('maxTokens').value = aiSettings.maxTokens || 200;
         }
 
         async function saveSettings() {
@@ -43,10 +83,22 @@
                 category: document.getElementById('category').value
             };
 
+            const aiSettings = {
+                openAiKey: document.getElementById('openAiKey').value,
+                temperature: document.getElementById('temperature').value,
+                maxTokens: document.getElementById('maxTokens').value
+            };
+
             await fetch('/settings', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(settings)
+            });
+
+            await fetch('/ai-settings', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(aiSettings)
             });
 
             alert("✅ Impostazioni salvate con successo!");

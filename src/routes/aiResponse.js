@@ -13,14 +13,31 @@ router.post('/generate-response', async (req, res) => {
             return res.status(400).json({ error: "API Key OpenAI mancante!" });
         }
 
-        const response = await axios.post("https://api.openai.com/v1/chat/completions", {
-            model: "gpt-4",
+        if (!userMessage || typeof userMessage !== "string") {
+            return res.status(400).json({ error: "Messaggio utente non valido!" });
+        }
+
+       const maxTokens = parseInt(settings.ai.maxTokens, 10);
+        const temperature = parseFloat(settings.ai.temperature);
+        
+        // Assicura che i valori siano validi
+        const dataOpenAi = {
+            model: "gpt-4o", // Assicurati che il modello sia valido
             messages: [{ role: "system", content: "Rispondi in modo professionale." }, { role: "user", content: userMessage }],
-            temperature: settings.ai.temperature || 0.7,
-            max_tokens: settings.ai.maxTokens || 200
-        }, {
+            temperature: !isNaN(temperature) ? temperature : 0.7, // Default a 0.7 se non valido
+            max_tokens: Number.isInteger(maxTokens) ? maxTokens : 200  // Default a 200 se non valido
+        };
+
+
+        console.log("📡 Payload inviato a OpenAI:", JSON.stringify(dataOpenAi, null, 2));
+
+        const response = await axios.post("https://api.openai.com/v1/chat/completions", dataOpenAi, {
             headers: { Authorization: `Bearer ${settings.ai.openAiKey}`, "Content-Type": "application/json" }
         });
+
+        if (!response || !response.data || !response.data.choices || response.data.choices.length === 0) {
+            throw new Error("Risposta vuota da OpenAI");
+        }
 
         const aiResponse = response.data.choices[0].message.content;
         console.log("✅ Risposta AI:", aiResponse);
@@ -31,10 +48,11 @@ router.post('/generate-response', async (req, res) => {
         settings.ai.history = history;
         await db.saveSettings(settings);
 
-        res.json({ aiResponse });
+        return res.json({ aiResponse });
+
     } catch (error) {
-        console.error("❌ Errore nella generazione della risposta AI:", error);
-        res.status(500).json({ error: "Errore nella generazione della risposta AI" });
+        console.error("❌ Errore nella generazione della risposta AI:", error.response ? error.response.data : error.message);
+        return res.status(500).json({ error: error.response ? error.response.data : "Errore nella generazione della risposta AI" });
     }
 });
 

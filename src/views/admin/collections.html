@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard - Gestione Collezioni Shopify</title>
+  <!-- Puoi includere Bootstrap per uno styling rapido -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/public/css/dashboard.css">
+</head>
+<body>
+  <div class="container mt-5">
+    <h1>Dashboard - Gestione Collezioni</h1>
+    <p class="lead">Visualizza e gestisci le collezioni del tuo negozio Shopify.</p>
+    
+    <!-- Campo nascosto per memorizzare l'hostname del negozio.
+         Questo valore potrebbe essere settato dinamicamente dal server o modificato manualmente -->
+    <input type="hidden" id="shop" value="your-shop-name.myshopify.com">
+    
+    <button id="loadCollectionsBtn" class="btn btn-primary mb-4">Carica Collezioni</button>
+    
+    <!-- Qui verranno visualizzate le collezioni -->
+    <div id="collectionsContainer"></div>
+  </div>
+  
+  <!-- Inclusione di Bootstrap JS (opzionale) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- Script per richiamare l'endpoint e visualizzare i dati -->
+  <script>
+    document.getElementById('loadCollectionsBtn').addEventListener('click', function() {
+      const shop = document.getElementById('shop').value;
+      fetch(`/shop-collections?shop=${encodeURIComponent(shop)}`)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Errore nel recupero delle collezioni');
+          }
+          return response.json();
+        })
+        .then(data => {
+          const container = document.getElementById('collectionsContainer');
+          container.innerHTML = '';
+          
+          // Sezione per le Custom Collections
+          const customSection = document.createElement('div');
+          customSection.innerHTML = '<h2>Custom Collections</h2>';
+          if (data.custom && data.custom.length > 0) {
+            const ulCustom = document.createElement('ul');
+            ulCustom.classList.add('list-group', 'mb-4');
+            data.custom.forEach(collection => {
+              const li = document.createElement('li');
+              li.classList.add('list-group-item');
+              li.textContent = collection.title || 'Nessun titolo';
+              ulCustom.appendChild(li);
+            });
+            customSection.appendChild(ulCustom);
+          } else {
+            customSection.innerHTML += '<p>Nessuna custom collection trovata.</p>';
+          }
+          
+          // Sezione per le Smart Collections
+          const smartSection = document.createElement('div');
+          smartSection.innerHTML = '<h2>Smart Collections</h2>';
+          if (data.smart && data.smart.length > 0) {
+            const ulSmart = document.createElement('ul');
+            ulSmart.classList.add('list-group');
+            data.smart.forEach(collection => {
+              const li = document.createElement('li');
+              li.classList.add('list-group-item');
+              li.textContent = collection.title || 'Nessun titolo';
+              ulSmart.appendChild(li);
+            });
+            smartSection.appendChild(ulSmart);
+          } else {
+            smartSection.innerHTML += '<p>Nessuna smart collection trovata.</p>';
+          }
+          
+          // Inserimento delle sezioni nel container principale
+          container.appendChild(customSection);
+          container.appendChild(smartSection);
+        })
+        .catch(error => {
+          console.error('Errore:', error);
+          document.getElementById('collectionsContainer').innerHTML = '<p class="text-danger">Errore nel recupero delle collezioni.</p>';
+        });
+    });
+  </script>
+</body>
+</html>
