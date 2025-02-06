@@ -19,8 +19,8 @@ export default function Sidebar() {
             </Link>
           </li>
           <li style={{ marginBottom: '1rem' }}>
-            <Link href="/dashboard/b">
-              <a>B</a>
+            <Link href="/dashboard/collezione">
+              <a>Collezione</a>
             </Link>
           </li>
           <li>
