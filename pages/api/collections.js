@@ -1,18 +1,26 @@
 export default async function handler(req, res) {
     try {
-      const shopDomain = process.env.SHOPIFY_APP_URL; // es: "iltuoshop.myshopify.com"
-      const accessToken = process.env.SHOPIFY_API_KEY; // Token API Shopify
+      // Recupera il dominio Shopify e il token di accesso dalle variabili d'ambiente
+      let shopDomain = process.env.SHOPIFY_SHOP_DOMAIN;
+      const accessToken = process.env.SHOPIFY_ACCESS_TOKEN;
   
-      // Controlla se le variabili d'ambiente sono impostate
+      // Rimuove eventuali "https://" e "/" finali (se presenti)
+      shopDomain = shopDomain?.replace(/^https?:\/\//, "").replace(/\/$/, "");
+  
+      // Controlla se le variabili sono state impostate correttamente
       if (!shopDomain || !accessToken) {
-        console.error("❌ ERRORE: Variabili d’ambiente mancanti.", { shopDomain, accessToken });
+        console.error("❌ ERRORE: Variabili d’ambiente mancanti.");
         return res.status(500).json({ error: "Variabili d’ambiente mancanti" });
       }
   
-      // URL API REST Shopify (2025-04)
-      const apiUrl = `https://${shopDomain}/admin/api/2025-04/custom_collections.json`;
+      console.log("🔗 Connessione a Shopify:", `https://${shopDomain}`);
   
-      // Chiamata API per ottenere le collezioni
+      // Endpoint per ottenere le collezioni generiche più probabili da Shopify
+      const apiUrl = `https://${shopDomain}/admin/api/2025-04/collection_listings.json`;
+  
+      console.log("🔍 Richiesta API a:", apiUrl);
+  
+      // Effettua la richiesta all'API Shopify
       const response = await fetch(apiUrl, {
         method: "GET",
         headers: {
@@ -21,7 +29,7 @@ export default async function handler(req, res) {
         }
       });
   
-      // Se la chiamata non è andata a buon fine, restituisce errore
+      // Se la risposta non è valida, stampa un errore
       if (!response.ok) {
         const errorText = await response.text();
         console.error("❌ ERRORE API Shopify:", errorText);
@@ -30,6 +38,8 @@ export default async function handler(req, res) {
   
       // Converte la risposta in JSON
       const data = await response.json();
+  
+      console.log("✅ Collezioni ricevute:", data.collection_listings?.length || 0);
   
       // Risponde con i dati delle collezioni
       res.status(200).json(data);
