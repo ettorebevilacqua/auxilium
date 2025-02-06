@@ -10,7 +10,7 @@ export default async function handler(req, res) {
       }
   
       // URL API REST Shopify (2025-04)
-      const apiUrl = `https://${shopDomain}/admin/api/2025-04/collection_listings.json`;
+      const apiUrl = `https://${shopDomain}/admin/api/2025-04/collection.json`;
   
       // Chiamata API per ottenere le collezioni
       const response = await fetch(apiUrl, {
