@@ -3,7 +3,7 @@ export default async function handler(req, res) {
     try {
       const shopDomain = process.env.SHOPIFY_SHOP_DOMAIN;  // es: "iltuoshop.myshopify.com"
       const accessToken = process.env.SHOPIFY_ACCESS_TOKEN;   // il token d'accesso
-  
+  console.log ("env", process.env)
       // Aggiorna l'endpoint per usare la versione 2025-04
       const apiUrl = `https://${shopDomain}/admin/api/2025-04/custom_collections.json`;
   
