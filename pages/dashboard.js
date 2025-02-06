@@ -1,16 +1,21 @@
+// pages/dashboard.js
 import Header from '../components/Header';
-// eventuali altri componenti come Sidebar, MainContent, ecc.
+import Sidebar from '../components/Sidebar';
 
 export default function Dashboard() {
-  // ... (resto del codice invariato)
   return (
-    <div>
-      <Header />
-      {/* Se hai una sidebar */}
-      {/* <Sidebar /> */}
-      <main>
-        {/* Il contenuto principale della dashboard */}
-      </main>
+    <div style={{ display: 'flex', minHeight: '100vh' }}>
+      {/* Sidebar a sinistra */}
+      <Sidebar />
+
+      {/* Contenuto principale a destra */}
+      <div style={{ flex: 1, padding: '1rem', boxSizing: 'border-box' }}>
+        <Header />
+        <main>
+          <h2>Dashboard Content</h2>
+          <p>Qui verranno visualizzate le informazioni principali della dashboard.</p>
+        </main>
+      </div>
     </div>
   );
 }
