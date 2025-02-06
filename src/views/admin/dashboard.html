@@ -7,6 +7,31 @@
     <link rel="stylesheet" href="/public/styles.css">
 </head>
 <body>
+    <script src="https://unpkg.com/@shopify/app-bridge@3"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    var AppBridge = window["app-bridge"];
+    var createApp = AppBridge.default;
+    var Redirect = AppBridge.actions.Redirect;
+
+    var shop = new URLSearchParams(window.location.search).get("shop");
+    var host = new URLSearchParams(window.location.search).get("host");
+
+    if (!shop || !host) {
+      console.error("Errore: parametri shop o host mancanti.");
+      return;
+    }
+
+    var app = createApp({
+      apiKey: "TUO_SHOPIFY_API_KEY",
+      shopOrigin: shop,
+      host: host,
+      forceRedirect: true
+    });
+
+    Redirect.create(app).dispatch(Redirect.Action.APP, "/");
+  });
+</script>
     <div class="container">
         <h1>⚙️ Auxilium - Impostazioni  x</h1>
         
