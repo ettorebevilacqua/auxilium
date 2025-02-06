@@ -22,13 +22,14 @@ app.use(i18n.init);
 app.use(express.json());
 
 app.use((req, res, next) => {
-    res.setHeader("Content-Security-Policy", "frame-ancestors 'self' https://*.myshopify.com https://admin.shopify.com;");
-    res.setHeader("X-Frame-Options", "ALLOWALL");
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-    next();
+  res.setHeader("Content-Security-Policy", "frame-ancestors https://*.myshopify.com https://admin.shopify.com;");
+  res.setHeader("X-Frame-Options", "ALLOWALL");
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  next();
 });
+
 
 // Middleware per i file statici
 app.use('/public', express.static(path.join(__dirname, 'public'), {
