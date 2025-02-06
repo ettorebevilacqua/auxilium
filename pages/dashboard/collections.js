@@ -1,31 +1,44 @@
-// pages/api/collections.js
-export default async function handler(req, res) {
-    try {
-      const shopDomain = process.env.SHOPIFY_SHOP_DOMAIN;  // es: "iltuoshop.myshopify.com"
-      const accessToken = process.env.SHOPIFY_ACCESS_TOKEN;   // il token d'accesso
-  console.log ("env", process.env)
-      // Aggiorna l'endpoint per usare la versione 2025-04
-      const apiUrl = `https://${shopDomain}/admin/api/2025-04/custom_collections.json`;
-  
-      const response = await fetch(apiUrl, {
-        headers: {
-          'X-Shopify-Access-Token': accessToken,
-          'Content-Type': 'application/json',
-        }
-      });
-  
-      const text = await response.text();
-  
+import { useEffect, useState } from "react";
+
+export default function Collections() {
+  const [collections, setCollections] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    async function fetchCollections() {
       try {
-        const data = JSON.parse(text);
-        res.status(200).json(data);
-      } catch (error) {
-        console.error('Errore nel parsing della risposta JSON:', error, text);
-        res.status(500).json({ error: 'Errore nel parsing della risposta', details: text });
+        const response = await fetch("/api/collections");
+        const data = await response.json();
+
+        if (response.ok) {
+          setCollections(data.custom_collections || []);
+        } else {
+          throw new Error(data.error || "Errore sconosciuto");
+        }
+      } catch (err) {
+        console.error("Errore nel recuperare le collezioni:", err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Errore nel recuperare le collezioni' });
     }
-  }
+
+    fetchCollections();
+  }, []);
+
+  return (
+    <div>
+      <h2>Collezioni Shopify</h2>
+      {loading && <p>Caricamento...</p>}
+      {error && <p style={{ color: "red" }}>Errore: {error}</p>}
+      <ul>
+        {collections.map((col) => (
+          <li key={col.id}>{col.title}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
   
