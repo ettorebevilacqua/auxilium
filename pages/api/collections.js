@@ -1,7 +1,7 @@
 export default async function handler(req, res) {
     try {
-      const shopDomain = process.env.SHOPIFY_SHOP_DOMAIN; // es: "iltuoshop.myshopify.com"
-      const accessToken = process.env.SHOPIFY_ACCESS_TOKEN; // Token API Shopify
+      const shopDomain = process.env.SHOPIFY_APP_URL; // es: "iltuoshop.myshopify.com"
+      const accessToken = process.env.SHOPIFY_API_KEY; // Token API Shopify
   
       // Controlla se le variabili d'ambiente sono impostate
       if (!shopDomain || !accessToken) {
