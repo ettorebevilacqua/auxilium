@@ -6,10 +6,12 @@ const shopRoutes = require('./src/routes/shop');
 const dashboardRoutes = require('./src/routes/dashboard');
 const path = require('path');
 const settingsRoutes = require('./src/routes/settings');
-
+const aiConfigRoutes = require('./src/routes/aiConfig');
+const aiResponseRoutes = require('./src/routes/aiResponse');
+const shopifyIntegrationRoutes = require('./src/routes/shopifyIntegration');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 i18n.configure({
   locales: ['en', 'it'],
@@ -37,10 +39,16 @@ app.use('/public', express.static(path.join(__dirname, 'public'), {
     }
 }));
 app.use(settingsRoutes);
+app.use(aiConfigRoutes);
+app.use(shopifyIntegrationRoutes);
+
+app.use('/', aiResponseRoutes);
 app.use('/', indexRoutes);
 app.use('/', authRoutes);
 app.use('/', shopRoutes);
 app.use('/', dashboardRoutes);
+
+console.log('Starting server... xx');
 
 app.listen(PORT, () => {
   console.log(`Shopify app listening on port ${PORT}`);
