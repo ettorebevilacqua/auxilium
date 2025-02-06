@@ -2,7 +2,7 @@ export default async function handler(req, res) {
     try {
       const shopDomain = process.env.SHOPIFY_APP_URL; // es: "iltuoshop.myshopify.com"
       const accessToken = process.env.SHOPIFY_API_KEY; // Token API Shopify
-  
+  console.log ("visualizzo ENV", shopDomain,accessToken)
       // Controlla se le variabili d'ambiente sono impostate
       if (!shopDomain || !accessToken) {
         console.error("❌ ERRORE: Variabili d’ambiente mancanti.", { shopDomain, accessToken });
@@ -10,7 +10,7 @@ export default async function handler(req, res) {
       }
   
       // URL API REST Shopify (2025-04)
-      const apiUrl = `https://${shopDomain}/admin/api/2025-04/collection.json`;
+      const apiUrl = `https://${shopDomain}/admin/api/2025-04/custom_collections.json`;
   
       // Chiamata API per ottenere le collezioni
       const response = await fetch(apiUrl, {
