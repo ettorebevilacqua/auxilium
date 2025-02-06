@@ -10,26 +10,34 @@
     <script src="https://unpkg.com/@shopify/app-bridge@3"></script>
 <script>
   document.addEventListener("DOMContentLoaded", function () {
+    console.log("🛠 Shopify App Bridge Init");
+
     var AppBridge = window["app-bridge"];
     var createApp = AppBridge.default;
     var Redirect = AppBridge.actions.Redirect;
 
-    var shop = new URLSearchParams(window.location.search).get("shop");
-    var host = new URLSearchParams(window.location.search).get("host");
+    var urlParams = new URLSearchParams(window.location.search);
+    var shop = urlParams.get("shop");
+    var host = urlParams.get("host");
 
     if (!shop || !host) {
-      console.error("Errore: parametri shop o host mancanti.");
+      console.error("⚠️ ERRORE: Parametri shop o host mancanti!");
       return;
     }
 
     var app = createApp({
-      apiKey: "695a0306d93703f90b35cd858dd6de9f",
+      apiKey: "TUO_SHOPIFY_API_KEY",
       shopOrigin: shop,
       host: host,
       forceRedirect: true
     });
 
-    Redirect.create(app).dispatch(Redirect.Action.APP, "/");
+    console.log("✅ Shopify App Bridge caricato con shop:", shop, "e host:", host);
+
+    if (window.top === window) {
+      console.log("⚠️ Non in un iframe! Eseguo il redirect...");
+      Redirect.create(app).dispatch(Redirect.Action.ADMIN_PATH, "/apps");
+    }
   });
 </script>
     <div class="container">
